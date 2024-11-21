@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const response = await fetch(`http://localhost:3008/${body.character}/message`, {
+    const response = await fetch(`http://20.220.22.154:3000/${body.character}/message`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
