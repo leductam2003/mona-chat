@@ -7,8 +7,8 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backdropBlur: {
-        'md': '12px',
+      fontFamily: {
+        'bad-unicorn': ['var(--font-bad-unicorn)'],
       },
     },
   },

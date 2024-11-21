@@ -234,13 +234,13 @@ const MonaChat: React.FC = () => {
                   <div key={index} className="flex flex-col">
                     {/* User message */}
                     {msg.role === "user" && (
-                      <div className="font-serif text-purple-100 whitespace-pre-line mb-5 text-lg border border-white/5 rounded-lg p-6">
+                      <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-5 text-2xl border border-white/5 rounded-lg p-6">
                         &gt; {msg.content}
                       </div>
                     )}
                     {/* Assistant message */}
                     {msg.role === "assistant" && (
-                      <div className="font-serif text-purple-100 whitespace-pre-line mb-5 text-lg border border-white/20 rounded-lg p-6">
+                      <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-5 text-2xl border border-white/20 rounded-lg p-6">
                         $ {msg.content}
                       </div>
                     )}

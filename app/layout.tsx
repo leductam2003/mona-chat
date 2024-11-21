@@ -13,6 +13,11 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
+const badUnicorn = localFont({
+  src: "./fonts/BadUnicornDemoRegular-BVWx.ttf",
+  variable: "--font-bad-unicorn",
+});
+
 export const metadata: Metadata = {
   title: "Mona",
   description: "Mona",
@@ -26,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${badUnicorn.variable} antialiased`}
       >
         {children}
       </body>
