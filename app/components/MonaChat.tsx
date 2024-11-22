@@ -12,6 +12,7 @@ interface Particle {
 interface ChatMessage {
   content: string;
   role: "user" | "assistant";
+  loading?: boolean;
 }
 
 const MonaChat: React.FC = () => {
@@ -25,6 +26,8 @@ const MonaChat: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [roomId] = useState(() => Math.random().toString(36).substring(2, 15));
   const [userId] = useState(() => Math.random().toString(36).substring(2, 15));
+  const [currentBg, setCurrentBg] = useState(1);
+  const totalBgs = 5; // 6 mona images + 1 mona-bg
 
   const headerHash = "MoNAgfpNyJPcuWu25PhSCagmRxmKy2yLFCi7QhivfF7";
 
@@ -54,6 +57,15 @@ const MonaChat: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const randomInterval = Math.floor(Math.random() * (60000 - 20000 + 1) + 10000); // Random between 10-30 seconds
+    const interval = setInterval(() => {
+      setCurrentBg(prev => (prev % totalBgs) + 1);
+    }, randomInterval);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleSendMessage = async () => {
     if (!message.trim() || isTyping) return;
 
@@ -63,7 +75,14 @@ const MonaChat: React.FC = () => {
         role: "user",
         content: message,
       };
-      setChatHistory(prev => [...prev, userMessage]);
+      
+      const loadingMessage: ChatMessage = {
+        role: "assistant",
+        content: "...",
+        loading: true
+      };
+      
+      setChatHistory(prev => [...prev, userMessage, loadingMessage]);
       setMessage("");
 
       const response = await fetch("/api/chat", {
@@ -81,24 +100,25 @@ const MonaChat: React.FC = () => {
       });
 
       const data = await response.json();
-      // Add audio playback
+      
+      setChatHistory(prev => prev.filter(msg => !msg.loading));
+
       if (!isMuted && data.audioUrl) {
         const audio = new Audio(`${data.audioUrl}`);
         audio.play().catch((error) => {
           console.error("Failed to play audio:", error);
         });
       }
-      // Add assistant message with empty content initially
+
       const assistantMessage: ChatMessage = {
         role: "assistant",
         content: "",
       };
-      setChatHistory((prev) => [...prev, assistantMessage]);
+      setChatHistory(prev => [...prev, assistantMessage]);
 
-      // Animate the response text
       for (let i = 0; i <= data.content.length; i++) {
         await new Promise((resolve) => setTimeout(resolve, 20));
-        setChatHistory((prev) => {
+        setChatHistory(prev => {
           const newHistory = [...prev];
           newHistory[newHistory.length - 1] = {
             role: "assistant",
@@ -109,6 +129,7 @@ const MonaChat: React.FC = () => {
       }
     } catch (error) {
       console.error("Failed to send message:", error);
+      setChatHistory(prev => prev.filter(msg => !msg.loading));
     } finally {
       setIsTyping(false);
     }
@@ -155,12 +176,6 @@ const MonaChat: React.FC = () => {
   return (
     <div
       className="min-h-screen bg-purple-950 relative flex items-center justify-center"
-      style={{
-        backgroundImage: 'url("/mona-bg.jpg")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
     >
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-purple-950/70 via-purple-900/60 to-purple-950/80" />
@@ -181,7 +196,7 @@ const MonaChat: React.FC = () => {
         ))}
       </div>
 
-      <div className="relative max-w-4xl w-full mx-auto p-4">
+      <div className="relative max-w-[1024px] w-full mx-auto p-4">
         <div className="rounded-lg border border-purple-300/30 bg-purple-950/60 overflow-hidden backdrop-blur-md shadow-xl shadow-purple-500/20">
           {/* Terminal header */}
           <div className="px-4 py-2 bg-purple-900/80 border-b border-purple-300/30 flex items-center justify-between">
@@ -217,58 +232,71 @@ const MonaChat: React.FC = () => {
           </div>
 
           {/* Chat content */}
-          <div className="p-6 min-h-[600px] flex flex-col relative">
-            {/* Pixel art logo with magical style - Move this above the chat container */}
-            <div className="font-mono text-purple-200 whitespace-pre mb-8 text-4xl relative glow-text">
-              {"✧ █▀▄▀█ █▀█ █▄░█ █▀█ ✧\n"}
-              {"✧ █░▀░█ █▄█ █░▀█ █▀█ ✧"}
-            </div>
-
-            <div className="flex-1 relative">
-              {/* Chat history container */}
-              <div
-                ref={chatContainerRef}
-                className="absolute inset-0 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-purple-300/50 scrollbar-track-purple-900/30 hover:scrollbar-thumb-purple-300/70"
-              >
-                {chatHistory.map((msg, index) => (
-                  <div key={index} className="flex flex-col">
-                    {/* User message */}
-                    {msg.role === "user" && (
-                      <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-5 text-2xl border border-white/5 rounded-lg p-6">
-                        &gt; {msg.content}
-                      </div>
-                    )}
-                    {/* Assistant message */}
-                    {msg.role === "assistant" && (
-                      <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-5 text-2xl border border-white/20 rounded-lg p-6">
-                        $ {msg.content}
-                      </div>
-                    )}
-                  </div>
-                ))}
+          <div 
+            className="flex flex-col relative"
+            style={{
+              backgroundImage: `url("/mona-${currentBg === 7 ? 'bg' : currentBg}.png")`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              height: "800px",
+              transition: "background-image 1s ease-in-out",
+            }}
+          >
+            {/* Full overlay with proper transparency */}
+            <div className="absolute inset-0 bg-purple-950/60" />
+            
+            {/* Content container */}
+            <div className="relative z-10 flex flex-col h-full p-6">
+              {/* Centered logo */}
+              <div className="font-mono text-purple-200 whitespace-pre mb-8 text-3xl relative glow-text text-center">
+                {"✧ █▀▄▀█ █▀█ █▄░█ █▀█ ✧\n"}
+                {"✧ █░▀░█ █▄█ █░▀█ █▀█ ✧"}
               </div>
-            </div>
 
-            {/* Message input */}
-            <div className="mt-auto relative">
-              <div className="relative flex items-center">
-                <span className="absolute left-4 text-purple-200">✧</span>
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setMessage(e.target.value)
-                  }
-                  onKeyPress={handleKeyPress}
-                  placeholder="Share your thoughts..."
-                  className="w-full bg-purple-900/40 border border-purple-300/30 rounded-lg py-3 px-12 text-purple-100 placeholder-purple-300/50 focus:outline-none focus:ring-1 focus:ring-purple-300/50 backdrop-blur-sm"
-                />
-                <button
-                  className="absolute right-4 text-purple-200 hover:text-purple-100 transition-all active:scale-95"
-                  onClick={(e) => handleButtonClick(e, handleSendMessage)}
+              {/* Centered chat container */}
+              <div className="flex-1 relative">
+                <div
+                  ref={chatContainerRef}
+                  className="absolute inset-0 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-purple-300/50 scrollbar-track-purple-900/30 hover:scrollbar-thumb-purple-300/70"
                 >
-                  <Send size={20} />
-                </button>
+                  {/* Chat messages with larger text */}
+                  {chatHistory.map((msg, index) => (
+                    <div key={index} className="flex flex-col max-w-3xl mx-auto">
+                      {msg.role === "user" && (
+                        <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-3 text-3xl bg-purple-900/20 rounded-lg p-4">
+                          &gt; {msg.content}
+                        </div>
+                      )}
+                      {msg.role === "assistant" && (
+                        <div className={`font-bad-unicorn text-purple-100 whitespace-pre-line mb-3 text-2xl bg-purple-900/40 rounded-lg p-4 ${msg.loading ? 'animate-pulse' : ''}`}>
+                          $ {msg.content}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Input container with adjusted width */}
+              <div className="mt-4 w-[500px] mx-auto">
+                <div className="relative flex items-center">
+                  <span className="absolute left-4 text-purple-200">✧</span>
+                  <input
+                    type="text"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Share your thoughts..."
+                    className="font-bad-unicorn w-full bg-purple-900/40 rounded-lg py-4 px-12 text-2xl text-purple-100 placeholder-purple-300/50 focus:outline-none focus:ring-1 focus:ring-purple-300/50 backdrop-blur-sm"
+                  />
+                  <button
+                    className="absolute right-4 text-purple-200 hover:text-purple-100 transition-all active:scale-95"
+                    onClick={(e) => handleButtonClick(e, handleSendMessage)}
+                  >
+                    <Send size={20} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
