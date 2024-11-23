@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Send, Volume2, VolumeX, Twitter, MessageSquare, X } from "lucide-react";
+import { Send, Volume2, VolumeX, Twitter, MessageSquare } from "lucide-react";
 
 interface Particle {
   id: number;
