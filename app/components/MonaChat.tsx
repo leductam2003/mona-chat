@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Send, Volume2, VolumeX, Twitter } from "lucide-react";
+import { Send, Volume2, VolumeX, Twitter, MessageSquare, X } from "lucide-react";
 
 interface Particle {
   id: number;
@@ -13,6 +13,7 @@ interface ChatMessage {
   content: string;
   role: "user" | "assistant";
   loading?: boolean;
+  timestamp?: number;
 }
 
 const MonaChat: React.FC = () => {
@@ -29,7 +30,7 @@ const MonaChat: React.FC = () => {
   const [currentBg, setCurrentBg] = useState(1);
   const totalBgs = 6; // 6 mona images + 1 mona-bg
 
-  const headerHash = "MoNAgfpNyJPcuWu25PhSCagmRxmKy2yLFCi7QhivfF7";
+  const headerHash = "...";
 
   const handleButtonClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -219,11 +220,18 @@ const MonaChat: React.FC = () => {
                 {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
               </button>
               <a
+                href="https://t.me/MonaArcane"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 flex items-center justify-center rounded border border-indigo-300/50 text-indigo-300 hover:bg-indigo-300/10 transition-all active:scale-95"
+              >
+                <MessageSquare size={16} />
+              </a>
+              <a
                 href="https://x.com/MonaArcane"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 flex items-center justify-center rounded border border-indigo-300/50 text-indigo-300 hover:bg-indigo-300/10 transition-all active:scale-95"
-                onClick={(e) => handleButtonClick(e)}
               >
                 <Twitter size={16} />
               </a>
