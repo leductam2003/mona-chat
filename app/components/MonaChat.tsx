@@ -174,32 +174,31 @@ const MonaChat: React.FC = () => {
   }, []); // Run once on mount
 
   return (
-    <div
-      className="min-h-screen bg-purple-950 relative flex items-center justify-center"
-    >
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-950/70 via-purple-900/60 to-purple-950/80" />
+    <div className="min-h-screen relative flex items-center justify-center">
+      {/* Update overlay gradient to be more moonlit */}
+      <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/80 to-purple-950/90" />
 
+      {/* Update particles to look more like stardust */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {particles.map((particle) => (
           <div
             key={particle.id}
-            className="absolute bottom-0 animate-sparkle"
+            className="absolute bottom-0 animate-sparkle text-lg"
             style={{
               left: particle.left,
               animationDelay: particle.animationDelay,
               animationDuration: particle.animationDuration,
             }}
           >
-            ✧
+            ⋆
           </div>
         ))}
       </div>
 
       <div className="relative max-w-[1024px] w-full mx-auto p-4">
-        <div className="rounded-lg border border-purple-300/30 bg-purple-950/60 overflow-hidden backdrop-blur-md shadow-xl shadow-purple-500/20">
-          {/* Terminal header */}
-          <div className="px-4 py-2 bg-purple-900/80 border-b border-purple-300/30 flex items-center justify-between">
+        <div className="rounded-lg border border-indigo-300/20 bg-indigo-950/40 overflow-hidden backdrop-blur-lg shadow-xl shadow-indigo-500/20">
+          {/* Update header styling */}
+          <div className="px-4 py-2 bg-indigo-900/60 border-b border-indigo-300/20 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-400" />
@@ -212,7 +211,7 @@ const MonaChat: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               <button
-                className="w-8 h-8 flex items-center justify-center rounded border border-purple-300/50 text-purple-300 hover:bg-purple-300/10 transition-all active:scale-95"
+                className="w-8 h-8 flex items-center justify-center rounded border border-indigo-300/50 text-indigo-300 hover:bg-indigo-300/10 transition-all active:scale-95"
                 onClick={(e) =>
                   handleButtonClick(e, () => setIsMuted((prev) => !prev))
                 }
@@ -223,7 +222,7 @@ const MonaChat: React.FC = () => {
                 href="https://x.com/MonaArcane"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-8 h-8 flex items-center justify-center rounded border border-purple-300/50 text-purple-300 hover:bg-purple-300/10 transition-all active:scale-95"
+                className="w-8 h-8 flex items-center justify-center rounded border border-indigo-300/50 text-indigo-300 hover:bg-indigo-300/10 transition-all active:scale-95"
                 onClick={(e) => handleButtonClick(e)}
               >
                 <Twitter size={16} />
@@ -231,11 +230,11 @@ const MonaChat: React.FC = () => {
             </div>
           </div>
 
-          {/* Chat content */}
+          {/* Update chat content background */}
           <div 
             className="flex flex-col relative"
             style={{
-              backgroundImage: `url("/mona-${currentBg === 7 ? 'bg' : currentBg}.png")`,
+              backgroundImage: `url("/mona-${currentBg}.png")`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
@@ -243,13 +242,13 @@ const MonaChat: React.FC = () => {
               transition: "background-image 1s ease-in-out",
             }}
           >
-            {/* Full overlay with proper transparency */}
-            <div className="absolute inset-0 bg-purple-950/60" />
+            {/* Update overlay transparency */}
+            <div className="absolute inset-0 bg-indigo-950/70" />
             
             {/* Content container */}
             <div className="relative z-10 flex flex-col h-full p-6">
               {/* Centered logo */}
-              <div className="font-mono text-purple-200 whitespace-pre mb-8 text-3xl relative glow-text text-center">
+              <div className="font-mono text-indigo-200 whitespace-pre mb-8 text-3xl relative glow-text text-center">
                 {"✧ █▀▄▀█ █▀█ █▄░█ █▀█ ✧\n"}
                 {"✧ █░▀░█ █▄█ █░▀█ █▀█ ✧"}
               </div>
@@ -258,18 +257,18 @@ const MonaChat: React.FC = () => {
               <div className="flex-1 relative">
                 <div
                   ref={chatContainerRef}
-                  className="absolute inset-0 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-purple-300/50 scrollbar-track-purple-900/30 hover:scrollbar-thumb-purple-300/70"
+                  className="absolute inset-0 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-indigo-300/50 scrollbar-track-indigo-900/30 hover:scrollbar-thumb-indigo-300/70"
                 >
                   {/* Chat messages with larger text */}
                   {chatHistory.map((msg, index) => (
                     <div key={index} className="flex flex-col max-w-3xl mx-auto">
                       {msg.role === "user" && (
-                        <div className="font-bad-unicorn text-purple-100 whitespace-pre-line mb-3 text-3xl bg-purple-900/20 rounded-lg p-4">
+                        <div className="font-bad-unicorn text-indigo-100 whitespace-pre-line mb-3 text-3xl bg-indigo-900/20 rounded-lg p-4">
                           &gt; {msg.content}
                         </div>
                       )}
                       {msg.role === "assistant" && (
-                        <div className={`font-bad-unicorn text-purple-100 whitespace-pre-line mb-3 text-2xl bg-purple-900/40 rounded-lg p-4 ${msg.loading ? 'animate-pulse' : ''}`}>
+                        <div className={`font-bad-unicorn text-indigo-100 whitespace-pre-line mb-3 text-2xl bg-indigo-900/40 rounded-lg p-4 ${msg.loading ? 'animate-pulse' : ''}`}>
                           $ {msg.content}
                         </div>
                       )}
@@ -281,17 +280,17 @@ const MonaChat: React.FC = () => {
               {/* Input container with adjusted width */}
               <div className="mt-4 w-[500px] mx-auto">
                 <div className="relative flex items-center">
-                  <span className="absolute left-4 text-purple-200">✧</span>
+                  <span className="absolute left-4 text-indigo-200">✧</span>
                   <input
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="Share your thoughts..."
-                    className="font-bad-unicorn w-full bg-purple-900/40 rounded-lg py-4 px-12 text-2xl text-purple-100 placeholder-purple-300/50 focus:outline-none focus:ring-1 focus:ring-purple-300/50 backdrop-blur-sm"
+                    className="font-bad-unicorn w-full bg-indigo-900/40 rounded-lg py-4 px-12 text-2xl text-indigo-100 placeholder-indigo-300/50 focus:outline-none focus:ring-1 focus:ring-indigo-300/50 backdrop-blur-sm"
                   />
                   <button
-                    className="absolute right-4 text-purple-200 hover:text-purple-100 transition-all active:scale-95"
+                    className="absolute right-4 text-indigo-200 hover:text-indigo-100 transition-all active:scale-95"
                     onClick={(e) => handleButtonClick(e, handleSendMessage)}
                   >
                     <Send size={20} />
@@ -322,7 +321,7 @@ const MonaChat: React.FC = () => {
             opacity: 1;
           }
           100% {
-            transform: translateY(-20vh) scale(1);
+            transform: translateY(-20vh) scale(1) rotate(45deg);
             opacity: 0;
           }
         }
@@ -331,13 +330,14 @@ const MonaChat: React.FC = () => {
         }
         .animate-sparkle {
           animation: sparkle linear forwards;
-          color: rgba(216, 180, 254, 0.6);
-          text-shadow: 0 0 5px rgba(216, 180, 254, 0.3),
-            0 0 10px rgba(216, 180, 254, 0.2);
+          color: rgba(199, 210, 254, 0.8);
+          text-shadow: 0 0 5px rgba(199, 210, 254, 0.5),
+                     0 0 10px rgba(199, 210, 254, 0.3);
         }
         .glow-text {
-          text-shadow: 0 0 10px rgba(216, 180, 254, 0.3),
-            0 0 20px rgba(216, 180, 254, 0.2);
+          text-shadow: 0 0 10px rgba(199, 210, 254, 0.4),
+                     0 0 20px rgba(199, 210, 254, 0.3),
+                     0 0 30px rgba(199, 210, 254, 0.2);
         }
         /* Scrollbar Styles */
         .scrollbar-thin::-webkit-scrollbar {
