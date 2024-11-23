@@ -27,7 +27,7 @@ const MonaChat: React.FC = () => {
   const [roomId] = useState(() => Math.random().toString(36).substring(2, 15));
   const [userId] = useState(() => Math.random().toString(36).substring(2, 15));
   const [currentBg, setCurrentBg] = useState(1);
-  const totalBgs = 8; // 6 mona images + 1 mona-bg
+  const totalBgs = 6; // 6 mona images + 1 mona-bg
 
   const headerHash = "MoNAgfpNyJPcuWu25PhSCagmRxmKy2yLFCi7QhivfF7";
 
@@ -176,7 +176,7 @@ const MonaChat: React.FC = () => {
   return (
     <div className="min-h-screen relative flex items-center justify-center">
       {/* Update overlay gradient to be more moonlit */}
-      <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/80 to-purple-950/90" />
+      <div className="absolute inset-0" />
 
       {/* Update particles to look more like stardust */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
