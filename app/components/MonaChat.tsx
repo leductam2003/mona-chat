@@ -27,7 +27,7 @@ const MonaChat: React.FC = () => {
   const [roomId] = useState(() => Math.random().toString(36).substring(2, 15));
   const [userId] = useState(() => Math.random().toString(36).substring(2, 15));
   const [currentBg, setCurrentBg] = useState(1);
-  const totalBgs = 5; // 6 mona images + 1 mona-bg
+  const totalBgs = 8; // 6 mona images + 1 mona-bg
 
   const headerHash = "MoNAgfpNyJPcuWu25PhSCagmRxmKy2yLFCi7QhivfF7";
 
