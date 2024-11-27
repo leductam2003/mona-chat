@@ -30,7 +30,7 @@ const MonaChat: React.FC = () => {
   const [currentBg, setCurrentBg] = useState(1);
   const totalBgs = 6; // 6 mona images + 1 mona-bg
 
-  const headerHash = "MoNAoCoXKLb38Y2VpbukGacdNYhvRTyVn92DvRApXep";
+  const headerHash = "MoNAgfpNyJPcuWu25PhSCagmRxmKy2yLFCi7QhivfF7";
 
   const handleButtonClick = (
     e: React.MouseEvent<HTMLElement>,
